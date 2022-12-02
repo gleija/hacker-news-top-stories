@@ -1,6 +1,20 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
+import { gql } from "@apollo/client";
+
+const STORIES = gql`
+  query Stories($cursor: Int!) {
+    stories(cursor: $cursor) {
+      author {
+        by
+        id
+        title
+        url
+      }
+    }
+  }
+`;
 
 function App() {
   const [count, setCount] = useState(0);

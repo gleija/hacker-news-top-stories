@@ -1,13 +1,21 @@
 export const resolvers = {
   Query: {
-    stories: (_, { cursor }, { dataSources }) => {
-      return dataSources.trackAPI.getStories(cursor);
+    stories: async (
+      _: Record<string, unknown>,
+      { cursor }: { cursor: number },
+      { dataSources }: { dataSources: any }
+    ): Promise<any> => {
+      return dataSources.storyAPI.getStories(cursor);
     },
   },
 
   Story: {
-    author: ({ id }, _, { dataSources }) => {
-      return dataSources.trackAPI.getAuthor(id);
+    author: (
+      { id }: { id: number },
+      _: Record<string, unknown>,
+      { dataSources }: { dataSources: any }
+    ): Promise<any> => {
+      return dataSources.storyAPI.getAuthor(id);
     },
   },
 };
