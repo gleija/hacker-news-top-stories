@@ -4,7 +4,7 @@ export interface StoryResource {
   id: number;
 }
 
-export class StoryAPI extends RESTDataSource {
+class StoryAPI extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = "https://hacker-news.firebaseio.com/v0/";
@@ -25,3 +25,5 @@ export class StoryAPI extends RESTDataSource {
     return await this.get(`/item/${id}.json`);
   }
 }
+
+export default StoryAPI;
