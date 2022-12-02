@@ -1,9 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
+import { gql, useQuery } from "@apollo/client";
+
+const STORIES = gql`
+  query Stories($cursor: Int!) {
+    stories(cursor: $cursor) {
+      author {
+        by
+        id
+        title
+        url
+      }
+    }
+  }
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const { error, data, fetchMore, networkStatus } = useQuery(STORIES, {
+    variables: { cursor: 0 },
+    notifyOnNetworkStatusChange: true,
+  });
 
   return (
     <div className="App">
@@ -28,7 +46,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
