@@ -1,5 +1,5 @@
 import { ApolloServer } from "apollo-server";
-import { StoryAPI } from "./datasources/stories-api";
+import StoryAPI from "./datasources/stories-api";
 import { typeDefs } from "./schema";
 import { resolvers } from "./resolvers";
 

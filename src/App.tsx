@@ -1,7 +1,7 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
 const STORIES = gql`
   query Stories($cursor: Int!) {
@@ -18,6 +18,10 @@ const STORIES = gql`
 
 function App() {
   const [count, setCount] = useState(0);
+  const { error, data, fetchMore, networkStatus } = useQuery(STORIES, {
+    variables: { cursor: 0 },
+    notifyOnNetworkStatusChange: true,
+  });
 
   return (
     <div className="App">
