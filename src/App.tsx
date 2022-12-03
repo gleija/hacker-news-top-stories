@@ -28,9 +28,9 @@ function App() {
     <div>
       <div>
         <QueryResult error={error} data={data}>
-          {data?.stories?.map((track: any, index: any) => (
+          {data?.stories?.map((story: any, index: any) => (
             <React.Fragment key={index}>
-              <p>{track.author.title}</p>
+              <p>{story.author.title}</p>
               {index === data?.stories?.length - 1 && (
                 <Waypoint
                   onEnter={() =>
@@ -43,6 +43,7 @@ function App() {
                           return pv;
                         }
                         return {
+                          __typename: "Story",
                           stories: [...pv.stories, ...fetchMoreResult.stories],
                         };
                       },
