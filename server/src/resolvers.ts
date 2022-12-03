@@ -1,10 +1,12 @@
+import { Context } from "../types/types";
+
 export const resolvers = {
   Query: {
     stories: async (
       _: Record<string, unknown>,
       { cursor }: { cursor: number },
-      { dataSources }: { dataSources: any }
-    ): Promise<any> => {
+      { dataSources }: { dataSources: Context }
+    ) => {
       return dataSources.storyAPI.getStories(cursor);
     },
   },
@@ -13,8 +15,8 @@ export const resolvers = {
     author: (
       { id }: { id: number },
       _: Record<string, unknown>,
-      { dataSources }: { dataSources: any }
-    ): Promise<any> => {
+      { dataSources }: { dataSources: Context }
+    ) => {
       return dataSources.storyAPI.getAuthor(id);
     },
   },

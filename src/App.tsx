@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import QueryResult from "./components/QueryResult";
 import { Waypoint } from "react-waypoint";
+import "./App.css";
+import { Story } from "./generated-types/graphql";
 
 const STORIES = gql`
   query Stories($cursor: Int!) {
@@ -18,7 +19,6 @@ const STORIES = gql`
 `;
 
 function App() {
-  const [count, setCount] = useState(0);
   const { error, data, fetchMore, networkStatus } = useQuery(STORIES, {
     variables: { cursor: 0 },
     notifyOnNetworkStatusChange: true,
@@ -28,7 +28,7 @@ function App() {
     <div>
       <div>
         <QueryResult error={error} data={data}>
-          {data?.stories?.map((story: any, index: any) => (
+          {data?.stories?.map((story: Story, index: number) => (
             <React.Fragment key={index}>
               <p>{story.author.title}</p>
               {index === data?.stories?.length - 1 && (
@@ -36,7 +36,7 @@ function App() {
                   onEnter={() =>
                     fetchMore({
                       variables: {
-                        cursor: data?.stories?.length - 1,
+                        cursor: data?.stories?.length,
                       },
                       updateQuery: (pv, { fetchMoreResult }) => {
                         if (!fetchMoreResult) {
