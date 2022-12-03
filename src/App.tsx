@@ -1,7 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { gql, useQuery } from "@apollo/client";
+import { LoadingSpinner } from "@apollo/space-kit/Loaders/LoadingSpinner";
+import styled from "styled-components";
+import QueryResult from "./components/QueryResult";
+import { Waypoint } from "react-waypoint";
 
 const STORIES = gql`
   query Stories($cursor: Int!) {
@@ -24,29 +28,58 @@ function App() {
   });
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div
+      style={{
+        backgroundColor: "#fafafa",
+      }}
+    >
+      <div style={{ maxWidth: 400, margin: "auto", padding: 10 }}>
+        <QueryResult error={error} data={data}>
+          {data?.stories?.map((track: any, index: any) => (
+            <React.Fragment key={index}>
+              <p>{track.author.by}</p>
+              {index === data?.stories?.length - 1 && (
+                <Waypoint
+                  onEnter={() =>
+                    fetchMore({
+                      variables: {
+                        cursor: data?.stories?.length - 1,
+                      },
+                      updateQuery: (pv, { fetchMoreResult }) => {
+                        if (!fetchMoreResult) {
+                          return pv;
+                        }
+                        return {
+                          stories: [...pv.stories, ...fetchMoreResult.stories],
+                        };
+                      },
+                    })
+                  }
+                />
+              )}
+            </React.Fragment>
+          ))}
+          {networkStatus === 3 && (
+            <SpinnerContainer>
+              <LoadingSpinner
+                data-testid="spinner"
+                size="large"
+                theme="grayscale"
+              />
+            </SpinnerContainer>
+          )}
+        </QueryResult>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   );
 }
 
 export default App;
+
+const SpinnerContainer = styled.div({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: "100vh",
+});
