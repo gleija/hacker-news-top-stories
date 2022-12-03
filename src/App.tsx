@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { gql, useQuery } from "@apollo/client";
-import { LoadingSpinner } from "@apollo/space-kit/Loaders/LoadingSpinner";
-import styled from "styled-components";
 import QueryResult from "./components/QueryResult";
 import { Waypoint } from "react-waypoint";
 
@@ -28,16 +25,12 @@ function App() {
   });
 
   return (
-    <div
-      style={{
-        backgroundColor: "#fafafa",
-      }}
-    >
-      <div style={{ maxWidth: 400, margin: "auto", padding: 10 }}>
+    <div>
+      <div>
         <QueryResult error={error} data={data}>
           {data?.stories?.map((track: any, index: any) => (
             <React.Fragment key={index}>
-              <p>{track.author.by}</p>
+              <p>{track.author.title}</p>
               {index === data?.stories?.length - 1 && (
                 <Waypoint
                   onEnter={() =>
@@ -59,15 +52,7 @@ function App() {
               )}
             </React.Fragment>
           ))}
-          {networkStatus === 3 && (
-            <SpinnerContainer>
-              <LoadingSpinner
-                data-testid="spinner"
-                size="large"
-                theme="grayscale"
-              />
-            </SpinnerContainer>
-          )}
+          {networkStatus === 3 && <div>Loading...</div>}
         </QueryResult>
       </div>
     </div>
@@ -75,11 +60,3 @@ function App() {
 }
 
 export default App;
-
-const SpinnerContainer = styled.div({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100%",
-  height: "100vh",
-});
