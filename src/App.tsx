@@ -7,6 +7,16 @@ import {
   StoriesQueryVariables,
   Story,
 } from "./generated-types/graphql";
+import {
+  CardContainer,
+  CardContent,
+  CardBody,
+  CardTitle,
+  CardFooter,
+  AuthorImage,
+  AuthorAndStory,
+  AuthorName,
+} from "./styled-components";
 
 const STORIES = gql`
   query Stories($cursor: Int!) {
@@ -42,7 +52,30 @@ function App() {
     <div>
       {data?.stories?.map((story: Story, index: number) => (
         <React.Fragment key={index}>
-          <p>{story.author.title}</p>
+          <CardContainer>
+            <CardContent>
+              <CardBody>
+                <CardTitle>{story.author.title}</CardTitle>
+                <CardFooter>
+                  <AuthorAndStory>
+                    <AuthorImage />
+                    <AuthorName>{story.author.by}</AuthorName>
+                  </AuthorAndStory>
+                  <div>
+                    <a
+                      href={`https://www.google.com/`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <div className="navigate icon">
+                        <i></i>
+                      </div>
+                    </a>
+                  </div>
+                </CardFooter>
+              </CardBody>
+            </CardContent>
+          </CardContainer>
           {index === (data?.stories || "").length - 1 && (
             <Waypoint
               onEnter={() =>
