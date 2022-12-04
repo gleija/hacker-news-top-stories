@@ -4,8 +4,9 @@
   "author": "Gary Leija",
   "version": "0.1.0",
   "scripts": {
-    "start": "nodemon -e ts,js --exec 'ts-node' --project ./server/src/tsconfig.json ./server/src/index.ts",
+    "start:api": "nodemon -e ts,js --exec 'ts-node' --project ./server/src/tsconfig.json ./server/src/index.ts",
     "dev": "vite",
+    "start": "npm-run-all -p start:api dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts"
@@ -17,6 +18,7 @@
     "apollo-server": "^3.11.1",
     "graphql": "^16.6.0",
     "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
