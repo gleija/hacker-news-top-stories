@@ -71,10 +71,10 @@
   width: 0;
   height: 0;
   color: white;
-  border-top: solid 8px transparent;
-  border-bottom: solid 8px currentColor;
-  border-left: solid 10px transparent;
-  border-right: solid 10px transparent;
+  border-top: solid 5px transparent;
+  border-bottom: solid 5px currentColor;
+  border-left: solid 7px transparent;
+  border-right: solid 7px transparent;
 }
 
 .navigate.icon i {

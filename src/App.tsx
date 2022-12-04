@@ -17,6 +17,7 @@ import {
   AuthorAndStory,
   AuthorName,
 } from "./styled-components";
+import { NavigateIcon } from "./components/NavigateIcon";
 
 const STORIES = gql`
   query Stories($cursor: Int!) {
@@ -61,17 +62,7 @@ function App() {
                     <AuthorImage />
                     <AuthorName>{story.author.by}</AuthorName>
                   </AuthorAndStory>
-                  <div>
-                    <a
-                      href={`https://www.google.com/`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <div className="navigate icon">
-                        <i></i>
-                      </div>
-                    </a>
-                  </div>
+                  <NavigateIcon url={story.author.url || ""} />
                 </CardFooter>
               </CardBody>
             </CardContent>
