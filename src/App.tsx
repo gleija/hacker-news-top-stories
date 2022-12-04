@@ -1,8 +1,23 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from "react";
 import { gql, useQuery } from "@apollo/client";
-import QueryResult from "./components/QueryResult";
 import { Waypoint } from "react-waypoint";
+import "./App.css";
+import {
+  StoriesQuery,
+  StoriesQueryVariables,
+  Story,
+} from "./generated-types/graphql";
+import {
+  CardContainer,
+  CardContent,
+  CardBody,
+  CardTitle,
+  CardFooter,
+  AuthorImage,
+  AuthorAndStory,
+  AuthorName,
+} from "./styled-components";
+import { NavigateIcon } from "./components/NavigateIcon";
 
 const STORIES = gql`
   query Stories($cursor: Int!) {
@@ -18,44 +33,70 @@ const STORIES = gql`
 `;
 
 function App() {
-  const [count, setCount] = useState(0);
-  const { error, data, fetchMore, networkStatus } = useQuery(STORIES, {
+  const { error, data, fetchMore, networkStatus } = useQuery<
+    StoriesQuery,
+    StoriesQueryVariables
+  >(STORIES, {
     variables: { cursor: 0 },
     notifyOnNetworkStatusChange: true,
   });
 
+  if (!data || !data.stories) {
+    return <p>Loading ...</p>;
+  }
+
+  if (data.stories?.length === 0) {
+    return <p>Nothing to show ...</p>;
+  }
+
+  if (error) {
+    return <p>ERROR: {error.message}</p>;
+  }
+
   return (
     <div>
-      <div>
-        <QueryResult error={error} data={data}>
-          {data?.stories?.map((story: any, index: any) => (
-            <React.Fragment key={index}>
-              <p>{story.author.title}</p>
-              {index === data?.stories?.length - 1 && (
-                <Waypoint
-                  onEnter={() =>
-                    fetchMore({
-                      variables: {
-                        cursor: data?.stories?.length - 1,
-                      },
-                      updateQuery: (pv, { fetchMoreResult }) => {
-                        if (!fetchMoreResult) {
-                          return pv;
-                        }
-                        return {
-                          __typename: "Story",
-                          stories: [...pv.stories, ...fetchMoreResult.stories],
-                        };
-                      },
-                    })
-                  }
-                />
-              )}
-            </React.Fragment>
-          ))}
-          {networkStatus === 3 && <div>Loading...</div>}
-        </QueryResult>
-      </div>
+      {data?.stories?.map((story: Story, index: number) => (
+        <React.Fragment key={index}>
+          <CardContainer>
+            <CardContent>
+              <CardBody>
+                <CardTitle>{story.author.title}</CardTitle>
+                <CardFooter>
+                  <AuthorAndStory>
+                    <AuthorImage />
+                    <AuthorName>{story.author.by}</AuthorName>
+                  </AuthorAndStory>
+                  <NavigateIcon url={story.author.url || ""} />
+                </CardFooter>
+              </CardBody>
+            </CardContent>
+          </CardContainer>
+          {index === (data?.stories || "").length - 1 && (
+            <Waypoint
+              onEnter={() =>
+                fetchMore({
+                  variables: {
+                    cursor: data?.stories?.length,
+                  },
+                  updateQuery: (pv, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) {
+                      return pv;
+                    }
+                    return {
+                      __typename: "Query",
+                      stories: [
+                        ...(pv.stories as []),
+                        ...(fetchMoreResult.stories as []),
+                      ],
+                    };
+                  },
+                })
+              }
+            />
+          )}
+        </React.Fragment>
+      ))}
+      {networkStatus === 3 && <div>Loading...</div>}
     </div>
   );
 }

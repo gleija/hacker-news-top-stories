@@ -1,8 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-
-export interface StoryResource {
-  id: number;
-}
+import { StoryResponse, AuthorResponse } from "../../types/types";
 
 class StoryAPI extends RESTDataSource {
   constructor() {
@@ -10,18 +7,18 @@ class StoryAPI extends RESTDataSource {
     this.baseURL = "https://hacker-news.firebaseio.com/v0/";
   }
 
-  public async getStories(cursor: number): Promise<any> {
+  public async getStories(cursor: number): Promise<StoryResponse> {
     const response = await this.get("topstories.json");
-    const arr = response.slice(cursor, cursor + 12);
-    const res = arr.map((id: number) => {
+    const paginatedResponse = response.slice(cursor, cursor + 12);
+    const storyResponse = paginatedResponse.map((id: number) => {
       return {
         id: id,
       };
     });
-    return res;
+    return storyResponse;
   }
 
-  public async getAuthor(id: number): Promise<any> {
+  public async getAuthor(id: number): Promise<AuthorResponse> {
     return await this.get(`/item/${id}.json`);
   }
 }
