@@ -15,6 +15,9 @@ const CardContainer = styled.div({
   overflow: "hidden",
   position: "relative",
   textDecoration: "none",
+  "@media (max-width: 768px)": {
+    fontSize: 10,
+  },
 });
 
 const CardContent = styled.div({
@@ -30,6 +33,9 @@ const CardBody = styled.div({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
+  "@media (max-width: 768px)": {
+    padding: 10,
+  },
 });
 
 const CardTitle = styled.h3({
@@ -63,6 +69,10 @@ const AuthorImage = styled.div({
   backgroundColor: "#bbb",
   borderRadius: "50%",
   objectFit: "cover",
+  "@media (max-width: 768px)": {
+    height: 15,
+    width: 15,
+  },
 });
 
 export {

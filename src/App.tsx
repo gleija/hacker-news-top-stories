@@ -41,7 +41,11 @@ function App() {
     notifyOnNetworkStatusChange: true,
   });
 
-  if (!data || !data.stories || data.stories?.length === 0) {
+  if (!data || !data.stories) {
+    return <p>Loading ...</p>;
+  }
+
+  if (data.stories?.length === 0) {
     return <p>Nothing to show ...</p>;
   }
 
